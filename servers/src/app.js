@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+let cors = require('cors')
 const {sequelize} = require('./models')
 
 const config = require('./config/config')
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors())
 
 require('./route')(app)
 
@@ -47,4 +49,3 @@ sequelize.sync({force: false}).then(() => {
  console.log('Server running on ' + port)
  })
 })
-
