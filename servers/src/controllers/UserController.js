@@ -1,30 +1,27 @@
-const {User} = require('../models')
+const { User } = require('../models')
 
 module.exports = {
 
-    
     // Get all users
     async index(req, res) {
-        //res.send('ดูข้อมูลผู้ใช้งานทั้งหมด');
         try {
             const users = await User.findAll()
             res.send(users)
-        } catch (error) {
+        } catch (err) {
             res.status(500).send({
                 error: 'The users information was incorrect'
             })
         }
     },
-
     // Create user
+    // res.send('ทำการสร้างผู้ใช้งาน' + JSON.stringify(req.body));
     async create(req, res) {
-        //res.send('ทำการสร้างผู้ใช้งาน' + JSON.stringify(req.body));
         try {
             const user = await User.create(req.body)
             res.send(user.toJSON())
-        } catch (error) {
+        } catch (err) {
             res.status(500).send({
-                error: 'Create users information was incorrect'
+                error: 'Create user incorrect'
             })
         }
     },
@@ -47,42 +44,33 @@ module.exports = {
     },
 
     // Delete user
-    async delete(req, res) {
-        //res.send('ทำการลบผู้ใช้งาน:' + req.params.userId + ' : ' + JSON.stringify(req.body));
-    try {
-        const user = await User.findOne({
-            where: {
-                id: req.params.userId
-            }
-        })
-        if (!user){
-            return res.status(403).send({
-                error: 'The user id is not found'
-            })
-        }
-
-        await user.destroy()
-        res.send(user)
-
-    } catch (error) {
-        res.status(500).send({
-            error: 'Delete user incorrect'
-        })
-    }
-    },
-
-    async show(req, res) {
+    // res.send('ทำการลบผู้ใช้งาน:' + req.params.userId + ' : ' + JSON.stringify(req.body));
+    // delete user
+    async remove(req, res) {
         try {
             const user = await User.findOne({
                 where: {
                     id: req.params.userId
                 }
             })
-            if (!user){
+            if (!user) {
                 return res.status(403).send({
-                    error: 'The user id is not found'
+                    error: 'The user information was incorrect'
                 })
             }
+            await user.destroy()
+            res.send(user)
+        } catch (err) {
+            res.status(500).send({
+                error: 'The user information was incorrect'
+            })
+        }
+    },
+
+    // Show user by id
+    async show(req, res) {
+        try {
+            const user = await User.findByPk(req.params.userId)
             res.send(user)
         } catch (err) {
             res.status(500).send({
@@ -90,5 +78,6 @@ module.exports = {
             })
         }
     }
-};
+}
+
 
