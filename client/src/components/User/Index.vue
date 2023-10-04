@@ -32,9 +32,10 @@ export default {
     <div>
 
         <h1>Get all users</h1>
+        <p><button v-on:click="logout">Logout</button></p>
         <h4>จํานวนผู้ใช้งาน {{ users.length }}</h4>
         <button v-on:click="navigateTo('/user/create')">สร้างข้อมูลผู้ใช้</button>
-        
+
         <hr>
         <!-- ลูปตามจำนวน id (primary key) -->
         <div v-for="user in users" v-bind:key="user.id">
@@ -59,6 +60,7 @@ export default {
 
 import UsersService from '@/services/UsersService'
 
+
 export default {
     data() {
         return {
@@ -74,6 +76,13 @@ export default {
     },
 
     methods: {
+        logout() {
+            this.$store.dispatch('setToken', null)
+            this.$store.dispatch('setUser', null)
+            this.$router.push({
+                name: 'login'
+            })
+        },
 
         navigateTo(route) {
             this.$router.push(route)
